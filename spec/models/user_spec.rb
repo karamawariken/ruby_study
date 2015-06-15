@@ -14,6 +14,7 @@ describe User do
   it { should respond_to(:password_digest) }
   it { should respond_to(:password) }
   it { should respond_to(:password_confirmation) }
+  it { should respond_to(:authenticate) }
 
   it { should be_valid }
 
@@ -69,11 +70,19 @@ describe User do
   end
 
   describe "when password doesn't match confirmation" do
-    before { @user.password_confirmation = "mismatch" }
+    before { @user.password_confirmation = "missmatch" }
     it { should_not be_valid }
   end
 
-  it { should respond_to(:authenticate) }
+  describe "when email doesn't match validation" do
+    let(:missmatch_case_email) { "foo@bar..com" }
+
+    it "should_not be_valid" do
+      @user.email = missmatch_case_email
+      @user.save
+      should_not be_valid
+    end
+  end
 
   describe "with a password that's too short" do
     before { @user.password = @user.password_confirmation = "a" * 5 }
@@ -94,6 +103,16 @@ describe User do
       it { should_not eq user_for_invalid_password }
       #rspec 3.0以上では、be_true は be_truthy be_falseはbe_falseyに変更されている
       specify { expect(user_for_invalid_password).to be_falsey }
+    end
+  end
+
+  describe "email address with mixed case" do
+    let(:mixed_case_email) { "Foo@ExAMPle.CoM" }
+
+    it "should be saved as all lower-case" do
+      @user.email = mixed_case_email
+      @user.save
+      expect(@user.reload.email).to eq mixed_case_email.downcase
     end
   end
 end
