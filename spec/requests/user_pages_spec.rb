@@ -25,6 +25,7 @@ describe "User pages" do
       end
 
       it "should create a user" do
+        #カウントが1つ増えることを確認する
         expect { click_button submit }.to change(User, :count).by(1)
       end
     end
