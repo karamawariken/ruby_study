@@ -15,7 +15,8 @@
     <div class="container">
     <%# 登録完了後に表示されるページにメッセージを表示し、２度目以降は表示させないようにする%>
       <% flash.each do |key, value| %>
-        <div class="alert alert-<%= key %>"><%=value %></div>
+        <!-- <div class="alert alert-<%= key %>"><%=value %></div> -->
+        <%= content_tag(:div, value, class: "alert alert-#{key}") %>
       <% end %>
       <%= yield %>
       <%= render 'layouts/footer' %>
