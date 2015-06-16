@@ -23,7 +23,7 @@ gem 'bcrypt-ruby', '3.1.2'
 # Use jquery as the JavaScript library
 gem 'jquery-rails'
 
-gem 'rspec-rails' ,">= 3.0.0"
+gem 'rspec-rails' ,">= 3.1.0"
 gem 'capybara'
 # Turbolinks makes following links in your web application faster. Read more: https://github.com/rails/turbolinks
 gem 'turbolinks'

@@ -1,4 +1,5 @@
-require 'spec_helper'
+#Rspecの3.0以上では、spec_helperではなく、rails_helperでrequireしないと読み込まれない
+require 'rails_helper'
 
 describe ApplicationHelper do
 

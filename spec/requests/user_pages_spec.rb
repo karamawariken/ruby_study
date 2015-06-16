@@ -1,5 +1,5 @@
-require 'rails_helper'
 include ApplicationHelper
+require 'spec_helper'
 
 describe "User pages" do
   subject { page }
@@ -28,6 +28,16 @@ describe "User pages" do
         #カウントが1つ増えることを確認する
         expect { click_button submit }.to change(User, :count).by(1)
       end
+    end
+
+    describe "after submission" do
+      before { click_button submit }
+
+      it {should have_title('Sign up') }
+      it {should have_content('error') }
+      it {should have_content("can't be blank") }
+      it {should have_content('too short') }
+      it {should have_content('is invalid') }
     end
   end
 
