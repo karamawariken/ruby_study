@@ -1,0 +1,11 @@
+<% provide(:title, 'All users') %>
+<h1>All users</h1>
+
+<%= will_paginate %>
+
+<ul class="users">
+  <%# Userクラスのuser変数に対してrenderを行う。そのためrailsでは、自動的に_user.html.erbという名前のパーシャルを探しにいく%>
+  <%= render @users %>
+</ul>
+
+<%= will_paginate %>
