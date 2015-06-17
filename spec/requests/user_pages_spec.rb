@@ -1,5 +1,5 @@
 include ApplicationHelper
-require 'spec_helper'
+require 'rails_helper'
 
 describe "User pages" do
   subject { page }
@@ -33,6 +33,8 @@ describe "User pages" do
         before { click_button submit }
         let(:user) { User.find_by(email: 'user@example.com') }
 
+        #新規ユーザ登録後にユーザがサインインしたことをテストする
+        it { should have_link('Sign out') }
         it { should have_title(user.name) }
         #特定のcssクラスに属する特定のHTMLタグが存在しているかどうかをテストします
         it { should have_selector('div.alert.alert-success', text: 'Welcome') }
