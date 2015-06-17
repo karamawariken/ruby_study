@@ -23,7 +23,9 @@ gem 'bcrypt-ruby', '3.1.2'
 # Use jquery as the JavaScript library
 gem 'jquery-rails'
 
-gem 'rspec-rails' ,">= 3.0.0"
+gem 'rspec-rails' ,">= 3.1.0"
+#itsを使えるようにする
+gem 'rspec-its'
 gem 'capybara'
 # Turbolinks makes following links in your web application faster. Read more: https://github.com/rails/turbolinks
 gem 'turbolinks'
@@ -36,6 +38,11 @@ group :doc do
   gem 'sdoc', require: false
 end
 
+group :test do
+  gem 'factory_girl_rails','4.2.1'
+  gem 'cucumber-rails', '1.4.0', :require => false
+  gem 'database_cleaner', github: 'bmabey/database_cleaner'
+end
 # Use ActiveModel has_secure_password
 # gem 'bcrypt', '~> 3.1.7'
 
