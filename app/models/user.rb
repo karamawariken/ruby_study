@@ -30,6 +30,7 @@ class User < ActiveRecord::Base
   def feed
     #SQLインジェクションの防止 id がクエリに入る前にエスケープされる
     Micropost.where("user_id = ?", id)
+    Micropost.from_users_followed_by(self)
   end
 
   # following?メソッドはother_userという1人のユーザーを引数にとり、
