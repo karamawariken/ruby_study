@@ -8,11 +8,13 @@ describe "Authentication" do
 
     describe "with invalid information" do
       let(:user) {FactoryGirl.create(:user) }
-      before do
-        fill_in "Email",    with: user.email.upcase
-        fill_in "Password", with: user.password
-        click_button "Sign in"
-      end
+      # before do
+      #   fill_in "Email",    with: user.email.upcase
+      #   fill_in "Password", with: user.password
+      #   click_button "Sign in"
+      # end
+      #上記をutilitiesでまとめたマッチャー
+      before { valid_signin(user) }
 
       it { should have_title(user.name) }
       #index用のテストリンク
@@ -40,7 +42,9 @@ describe "Authentication" do
       before { click_button "Sign in" }
 
       it { should have_title('Sign in') }
-      it { should have_selector('div.alert.alert-error', text: 'Invalid') }
+      #it { should have_selector('div.alert.alert-error', text: 'Invalid') }
+      #上記をutilitiesでカスタムマッチャー
+      it { should have_error_message('Invalid') }
 
       describe "after visiting antoher page" do
         before { click_link "Home" }
@@ -57,9 +61,7 @@ describe "Authentication" do
       describe "when attempting to visit a protected page" do
         before do
           visit edit_user_path(user)
-          fill_in "Email",    with: user.email
-          fill_in "Password", with: user.password
-          click_button "Sign in"
+          valid_signin(user)
         end
 
         describe "after signing in" do

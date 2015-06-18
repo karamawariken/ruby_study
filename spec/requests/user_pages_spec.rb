@@ -86,7 +86,8 @@ describe "User pages" do
         it { should have_link('Sign out') }
         it { should have_title(user.name) }
         #特定のcssクラスに属する特定のHTMLタグが存在しているかどうかをテストします
-        it { should have_selector('div.alert.alert-success', text: 'Welcome') }
+        #マッチャーにまとめた it { should have_selector('div.alert.alert-success', text: 'Welcome') }
+        it { should have_success_message('Welcome')}
       end
     end
 
@@ -137,6 +138,17 @@ describe "User pages" do
       it { should have_link('Sign out', href: signout_path) }
       specify { expect(user.reload.name).to  eq new_name }
       specify { expect(user.reload.email).to eq new_email }
+    end
+
+    describe "forbidden attributes" do
+      let(:params) do
+        { user: {admin: true, password: user.password, password_confirmation: user.password_confirmation} }
+      end
+      before do
+        sign_in user, no_capabara: true
+        patch user_path(user), params
+      end
+      specify { expect(user.reload).not_to be_admin }
     end
   end
 
