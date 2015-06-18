@@ -1,4 +1,13 @@
 class User < ActiveRecord::Base
+  has_many :microposts, dependent: :destroy
+  has_many :relationships, foreign_key: "follower_id", dependent: :destroy
+  has_many :followed_users, through: :relationships, source: :followed
+  #follow/ed_idを主キーとして渡すことでreverse_relationshipsをシミュレートするための１行
+  has_many :reverse_relationships, foreign_key: "followed_id",
+                                   class_name:  "Relationship",
+                                   dependent:   :destroy
+  has_many :followers, through: :reverse_relationships, source: :follower
+
   before_save { email.downcase! }
   before_save{ self.email = email.downcase }
   before_create :create_remember_token
@@ -16,6 +25,27 @@ class User < ActiveRecord::Base
 
   def User.encrypt(token)
     Digest::SHA1.hexdigest(token.to_s)
+  end
+
+  def feed
+    #SQLインジェクションの防止 id がクエリに入る前にエスケープされる
+    Micropost.where("user_id = ?", id)
+    Micropost.from_users_followed_by(self)
+  end
+
+  # following?メソッドはother_userという1人のユーザーを引数にとり、
+  # フォローする相手のユーザーがデータベース上に存在するかどうかをチェックします。
+  # follow!メソッドは、relationships関連付けを経由してcreate!を呼び出す
+  def following?(other_user)
+    relationships.find_by(followed_id: other_user.id)
+  end
+
+  def follow!(other_user)
+    relationships.create!(followed_id: other_user.id)
+  end
+
+  def unfollow!(other_user)
+    relationships.find_by(followed_id: other_user.id).destroy
   end
 
   private
