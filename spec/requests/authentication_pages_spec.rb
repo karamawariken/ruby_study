@@ -6,15 +6,17 @@ describe "Authentication" do
   describe "signin page" do
     before { visit signin_path }
 
+    #サインインしていない場合、Profileなどのリンクがないことのテスト
+    describe "with invalid information" do
+      it { should_not have_link('Users',   href: users_path) }
+      it { should_not have_link('Profile') }
+      it { should_not have_link('Sign out', href: signout_path) }
+    end
+
     describe "with invalid information" do
       let(:user) {FactoryGirl.create(:user) }
-      # before do
-      #   fill_in "Email",    with: user.email.upcase
-      #   fill_in "Password", with: user.password
-      #   click_button "Sign in"
-      # end
-      #上記をutilitiesでまとめたマッチャー
-      before { valid_signin(user) }
+      # #上記をutilitiesでまとめたマッチャー
+      before { sign_in user }
 
       it { should have_title(user.name) }
       #index用のテストリンク
@@ -61,7 +63,7 @@ describe "Authentication" do
       describe "when attempting to visit a protected page" do
         before do
           visit edit_user_path(user)
-          valid_signin(user)
+          sign_in user
         end
 
         describe "after signing in" do
@@ -83,10 +85,6 @@ describe "Authentication" do
           specify { expect(response).to redirect_to(signin_path) }
         end
       end
-      #サインインしたユーザーから見たインデックスページに、タイトルとコンテンツとサイトの
-      #すべてのユーザーが正しく表示されていることを確認します。このメソッドでは、3つのファクトリーユーザー
-      #(最初の1人としてサインインします) を作成し、インデックスページに表示されているそれぞれのユーザーにリスト要素
-      # (li) タグが与えられていることを確認します。
 
       describe "in the Users controller" do
 

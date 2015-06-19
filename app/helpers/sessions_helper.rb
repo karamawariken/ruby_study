@@ -1,8 +1,11 @@
 module SessionsHelper
   def sign_in(user)
     remember_token = User.new_remember_token
+    #ブラウザのcookiesをハッシュのように扱うことができる
     cookies.permanent[:remember_token] = remember_token
+    #update_attributeの利用により、検証せずに単一の属性を更新できる。
     user.update_attribute(:remember_token, User.encrypt(remember_token))
+    #コントローラーとビューどちらからもアクセスできるインスタンス生成
     self.current_user = user
   end
 

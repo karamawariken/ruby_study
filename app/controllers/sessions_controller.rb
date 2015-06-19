@@ -5,7 +5,7 @@ class SessionsController < ApplicationController
   def create
     #メールアドレスは、小文字で保存させているので、ここでdowncaseにして正しいかの検出を行う.
     #form_tagによりパラメータ変更
-    user = User.find_by(email:params[:email].downcase)
+    user = User.find_by(email: params[:email].downcase)
     if user && user.authenticate(params[:password])
       #ユーザをサインインさせ、ユーザページ(show)にリダイレクトする
       sign_in user
