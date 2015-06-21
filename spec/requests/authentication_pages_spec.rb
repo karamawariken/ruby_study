@@ -18,7 +18,10 @@ describe "Authentication" do
       # #上記をutilitiesでまとめたマッチャー
       before { sign_in user }
 
-      it { should have_title(user.name) }
+      #サインイン後のパスは、homeになるテスト
+      it { should have_link('view my profile') }
+
+
       #index用のテストリンク
       it { should have_link('Users',   href: users_path) }
       it { should have_link('Profile', href: user_path(user)) }
