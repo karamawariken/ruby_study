@@ -9,6 +9,10 @@ class User < ActiveRecord::Base
                                    dependent:   :destroy
   has_many :followers, through: :reverse_relationships, source: :follower
 
+  #左右の空白を消し、firstとfamilynameの中にアンダーバー入れた
+  before_save { name.strip
+                self.name = name.gsub(" ","_")
+              }
   before_save { email.downcase! }
   before_save { self.email = email.downcase }
   before_create :create_remember_token

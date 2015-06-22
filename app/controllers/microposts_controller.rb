@@ -4,8 +4,7 @@ class MicropostsController < ApplicationController
   before_action :reply_to_user, only: :create
 
   def create
-    @micropost = current_user.microposts.build(micropost_params)
-    if @micropost.save
+    if @micropost
       flash[:success] = "Micropost created!"
       redirect_to root_url
     else
@@ -33,12 +32,15 @@ class MicropostsController < ApplicationController
 
     def reply_to_user
       @micropost = current_user.microposts.build(micropost_params)
-      if reply_to = @micropost.content.match(/(@[\w+\-.]*)/i)
-        @other_user = User.where(name: reply_to.to_s[1..-1])
-        if @other_user && current_user.followed_users.includes(@other_user)
-          @micropost.in_reply_to = @other_user.id
+      if @micropost.save
+        if reply_to = @micropost.content.match(/(@[\w+-.]*)/i)
+          search_name = reply_to[1].to_s
+          search_name.slice!("@")
+          @other_user = User.where(name: search_name)
+          if @other_user && current_user.followed_users.includes(@other_user)
+            @micropost.update_columns(in_reply_to: @other_user[0].id)
+          end
         end
       end
-      raise @micropost.inspect
     end
 end
