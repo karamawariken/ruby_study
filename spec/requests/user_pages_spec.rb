@@ -94,7 +94,7 @@ describe "User pages" do
 
           #サインインした場合、homeviewにリダイレクトしてるかテスト
           it { should have_link('Sign out') }
-        end        
+        end
       end
     end
 
@@ -161,6 +161,7 @@ describe "User pages" do
 
   describe "profile page" do
     let(:user) { FactoryGirl.create(:user) }
+    #letは遅延評価に対して let!はbeforeと同じタイミングで上から順番に評価されるっぽい
     let!(:m1) { FactoryGirl.create(:micropost, user: user, content: "Foo") }
     let!(:m2) { FactoryGirl.create(:micropost, user: user, content: "Bar") }
 
@@ -174,7 +175,6 @@ describe "User pages" do
       it { should have_content(m2.content) }
       #countメソッドは直接DBを読みにいくいく
       #特定user_idに対するmicropostsの数をDBに問い合わせる
-      #countメソッドがボトルネックになった場合,counter cacheを使うこともできる
       it { should have_content(user.microposts.count) }
     end
 
