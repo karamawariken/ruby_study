@@ -8,6 +8,13 @@ SampleApp::Application.routes.draw do
       get :following, :followers
     end
   end
+
+  namespace :api, { format: 'json' } do
+    #namespace でv1などつけるとバージョンを設定して作成できる
+    resources :users
+    resources :microposts
+  end
+
   resources :sessions, only: [:new, :create, :destroy]
   resources :microposts, only: [:create, :destroy]
   resources :relationships, only: [:create, :destroy]
