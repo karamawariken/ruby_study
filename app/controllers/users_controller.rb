@@ -10,11 +10,7 @@ class UsersController < ApplicationController
   end
 
   def new
-    if signed_in?
-      redirect_to root_url
-    else
-      @user = User.new
-    end
+    @user = User.new
   end
 
   def show
@@ -23,17 +19,13 @@ class UsersController < ApplicationController
   end
 
   def create
-    if signed_in?
-      redirect_to root_url
+    @user = User.new(user_params)
+    if @user.save
+      sign_in @user
+      flash[:success] = "Welcome to the Sample App!"
+      redirect_to @user
     else
-      @user = User.new(user_params)
-      if @user.save
-        sign_in @user
-        flash[:success] = "Welcome to the Sample App!"
-        redirect_to @user
-      else
-        render 'new'
-      end
+      render 'new'
     end
   end
 

@@ -40,6 +40,7 @@ module SessionsHelper
     session.delete(:return_to)
   end
 
+  #前のページを覚えておく
   def store_location
     session[:return_to] = request.url
   end
