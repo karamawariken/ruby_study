@@ -25,12 +25,32 @@ module Api
       render json: @user
     end
 
+    def update
+      # puts 'hey'
+      # json_parse_request_body = JSON.parse(request.body.read)
+      # puts json_parse_request_body
+      # @user = User.find_by(:id => json_parse_request_body[:id] )
+      # puts @user
+
+      # if @user.save
+      #   # :ok == 200
+      #   head :ok
+      # else
+      #   # :bad_request == 400
+      #   head :bad_request
+      # end
+    end
 
   private
-    #headerに
+    #headerに 'Authorization:{"token":"access_token"}'あるかで判断
     def restrict_access
-      access_token = JSON.parse(request.headers[:HTTP_AUTHORIZATION])
-      ApiKey.find_by(access_token: access_token["token"])
+      if request.headers[:HTTP_AUTHORIZATION]
+        access_token = JSON.parse(request.headers[:HTTP_AUTHORIZATION])
+        ApiKey.find_by(access_token: access_token["token"])
+      else
+        flash[:error] = "Can't access page"
+        redirect_to root_url
+      end
     end
   end
 end
