@@ -1,8 +1,8 @@
 class User < ActiveRecord::Base
   has_many :microposts, dependent: :destroy
   has_many :relationships, foreign_key: "follower_id", dependent: :destroy
+  #followed_usersで relationshipsのfollower_idから関連を経由して、followedで定義されるデータを引っ張ってくる
   has_many :followed_users, through: :relationships, source: :followed
-  #follow/ed_idを主キーとして渡すことでreverse_relationshipsをシミュレートするための１行
   has_many :reverse_relationships, foreign_key: "followed_id",
                                    class_name:  "Relationship",
                                    dependent:   :destroy

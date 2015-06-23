@@ -195,7 +195,6 @@ describe User do
     let(:other_user) { FactoryGirl.create(:user) }
     before do
       @user.save
-      #other_user がDBにいるかチェック
       @user.follow!(other_user)
     end
 
