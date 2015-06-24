@@ -10,7 +10,7 @@ class User < ActiveRecord::Base
   has_many :followers, through: :reverse_relationships, source: :follower
 
   #左右の空白を消し、firstとfamilynameの中にアンダーバー入れた
-  before_save { name.strip
+  before_save { self.name = name.strip
                 self.name = name.gsub(" ","_")
               }
   before_save { email.downcase! }
@@ -18,8 +18,8 @@ class User < ActiveRecord::Base
   before_create :create_remember_token
 
   #presence 値が空ではないか case_sensitive 大文字小文字を区別するか
-  validates :name,  presence: true, length: { maximum: 50 }, uniqueness: { case_sensitive: false }
-  #VALID_EMAIL_REGEX = /\A[\w+\-.]+@[a-z\d\-.]+\.[a-z]+\z/i
+  VALID_NAME_REGEX = /\u3000/
+  validates :name,  presence: true, format: { without: VALID_NAME_REGEX ,message: "全角は入力できません"}, length: { maximum: 50 }, uniqueness: { case_sensitive: false }
   VALID_EMAIL_REGEX = /\A[\w+-.]+@[a-z\d\-]+(\.[a-z]+)*\.[a-z]+\z/i
   validates :email, presence: true, format: { with: VALID_EMAIL_REGEX }, uniqueness: { case_sensitive: false }
   validates :password, length: { minimum: 6 }

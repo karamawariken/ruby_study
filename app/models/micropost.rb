@@ -1,6 +1,6 @@
 class Micropost < ActiveRecord::Base
   belongs_to :user
-  belongs_to :in_reply_to, class_name: "Micropost"
+  belongs_to :in_reply_to, class_name: "User"
   #降順　new→oldの順
   default_scope -> { order('created_at DESC') }
   scope :including_replies, lambda { |user| from_users_followed_by(user) }

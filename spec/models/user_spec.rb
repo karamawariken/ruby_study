@@ -3,7 +3,7 @@ require 'rails_helper'
 describe User do
 
   before do
-    @user = User.new(name: "Example User", email: "user@example.com",
+    @user = User.new(name: "Example_User", email: "user@example.com",
                      password: "foobar", password_confirmation: "foobar")
   end
 
@@ -41,6 +41,11 @@ describe User do
 
   describe "when name is not present" do
     before { @user.name = " " }
+    it { should_not be_valid }
+  end
+
+  describe "when name has em space" do
+    before { @user.name = "a　a" }
     it { should_not be_valid }
   end
 

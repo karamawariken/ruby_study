@@ -1,9 +1,10 @@
 class MicropostsController < ApplicationController
   before_action :signed_in_user
   before_action :correct_user,   only: :destroy
-  before_action :reply_to_user, only: :create
+  #before_action :reply_to_user, only: :create
 
   def create
+    @micropost = current_user.microposts.build(micropost_params)
     if @micropost
       flash[:success] = "Micropost created!"
       redirect_to root_url
@@ -31,7 +32,7 @@ class MicropostsController < ApplicationController
     end
 
     def reply_to_user
-      @micropost = current_user.microposts.build(micropost_params)
+      @micropost.inspect
       if @micropost.save
         if reply_to = @micropost.content.match(/(@[\w+-.]*)/i)
           search_name = reply_to[1].to_s
