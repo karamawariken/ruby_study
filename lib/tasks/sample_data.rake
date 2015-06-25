@@ -4,12 +4,18 @@ namespace :db do
     make_users
     make_microposts
     make_relationships
+    make_reply_microposts
   end
 end
 
 def make_users
   admin = User.create!(name: "Example_User",
                email: "example@railstutorial.jp",
+               password: "foobar",
+               password_confirmation: "foobar",
+               admin: true )
+  k_n = User.create!(name: "k_n",
+               email: "k@gmail.com",
                password: "foobar",
                password_confirmation: "foobar",
                admin: true )
@@ -30,6 +36,17 @@ def make_microposts
   50.times do
     content = Faker::Lorem.sentence(5)
     users.each { |user| user.microposts.create!(content: content) }
+  end
+end
+
+def make_reply_microposts
+  users = User.all.limit(6)
+  reply_users = User.all.limit(6)
+  users.each do |user|
+    reply_users.each do |reply_user|
+      content = "@#{reply_user.name} from #{user.name}"
+      user.microposts.create!(content: content)
+    end
   end
 end
 

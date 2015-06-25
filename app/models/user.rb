@@ -1,6 +1,6 @@
 class User < ActiveRecord::Base
   has_many :microposts, dependent: :destroy
-  has_many :replies, foreign_key: "in_reply_to", class_name: "Micropost"
+  has_many :replies, foreign_key: "in_reply_to", class_name: "Micropost", dependent: :destroy
   has_many :relationships, foreign_key: "follower_id", dependent: :destroy
   has_many :followed_users, through: :relationships, source: :followed
   #follow/ed_idを主キーとして渡すことでreverse_relationshipsをシミュレートするための１行
@@ -13,7 +13,6 @@ class User < ActiveRecord::Base
   before_save { self.name = name.strip
                 self.name = name.gsub(" ","_")
               }
-  before_save { email.downcase! }
   before_save { self.email = email.downcase }
   before_create :create_remember_token
 
@@ -37,7 +36,6 @@ class User < ActiveRecord::Base
 
   def feed
     #SQLインジェクションの防止 id がクエリに入る前にエスケープされる
-    Micropost.where("user_id = ?", id)
     Micropost.from_users_followed_by(self)
     Micropost.including_replies(self)
   end

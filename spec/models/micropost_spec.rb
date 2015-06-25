@@ -1,4 +1,5 @@
 require 'rails_helper'
+  
 
 describe Micropost do
   let(:user) { FactoryGirl.create(:user) }
@@ -27,4 +28,24 @@ describe Micropost do
     before { @micropost.content = "a" * 141 }
     it { should_not be_valid }
   end
+end
+
+describe "Reply Micropost" do
+  let(:user) { FactoryGirl.create(:user, name: "Example_User") }
+  let(:other_user) { FactoryGirl.create(:user, name: "Example_Other_User") }
+  before do
+    user.save
+    other_user.save
+    @micropost = user.microposts.build(content: "@Example_Other_User test")
+    @micropost.save
+  end
+
+  subject { @micropost }
+
+  it { should respond_to(:content) }
+  it { should respond_to(:user_id) }
+
+  its(:in_reply_to) { should eq other_user}
+
+  it { should be_valid }
 end
