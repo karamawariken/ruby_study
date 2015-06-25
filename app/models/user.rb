@@ -35,8 +35,8 @@ class User < ActiveRecord::Base
   end
 
   def feed
-    #SQLインジェクションの防止 id がクエリに入る前にエスケープされる
-    Micropost.from_users_followed_by(self)
+    #返信機能のため以下コメントにして、スコープ追加
+    #Micropost.from_users_followed_by(self)
     Micropost.including_replies(self)
   end
 

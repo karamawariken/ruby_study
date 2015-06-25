@@ -16,6 +16,10 @@ class UsersController < ApplicationController
   def show
     @user = User.find(params[:id])
     @microposts = @user.microposts.paginate(page: params[:page])
+    respond_to do |format|
+      format.html
+      format.xml { render :xml => @user }
+    end
   end
 
   def create
@@ -79,4 +83,5 @@ class UsersController < ApplicationController
     def admin_user
       redirect_to(root_path) unless current_user.admin?
     end
+
 end

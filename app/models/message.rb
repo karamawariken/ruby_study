@@ -7,8 +7,4 @@ class Message < ActiveRecord::Base
   def message_time
     create_at.strftime("%m/%d/%y at%l:%M %p")
   end
-
-  # 新規メッセージの通知メソッド
-  # def notice_new_message(recipient_id)
-  # end
 end
