@@ -4,6 +4,8 @@ class UsersController < ApplicationController
   before_action :signed_in_user, only: [:index, :edit, :update, :destroy, :following, :followers]
   before_action :correct_user, only: [:edit, :update]
   before_action :admin_user, only: :destroy
+  skip_before_filter :verify_authenticity_token
+
 
   def index
     @users = User.paginate(page: params[:page])
@@ -16,9 +18,19 @@ class UsersController < ApplicationController
   def show
     @user = User.find(params[:id])
     @microposts = @user.microposts.paginate(page: params[:page])
-    respond_to do |format|
-      format.html
-      format.xml { render :xml => @user }
+    if params[:format] == "xml"
+      access_token = JSON.parse(request.headers[:HTTP_AUTHORIZATION])
+      if have_api_key?(access_token)
+        render :xml => @user 
+      else
+        head :bad_request
+      end
+    elsif params[:format] == nil
+      respond_to do |format|
+        format.html
+      end
+    else
+      head :bad_request
     end
   end
 
@@ -43,7 +55,7 @@ class UsersController < ApplicationController
   end
 
   def update
-    #update_attributes属性を後進するメソッド
+    #update_attributes属性を更新するメソッド
     if @user.update_attributes(user_params)
       #更新に成功した場合に扱う
       flash[:success] = "Profile updated"
@@ -71,7 +83,7 @@ class UsersController < ApplicationController
 
     #ここにadminを入れないことにより任意のユーザが自分自身にアプリケーションの管理者権限を与えることを防止している
     def user_params
-      params.require(:user).permit(:name, :email, :password, :password_confirmation)
+      params.require(:user).permit(:name, :email, :nickname, :password, :password_confirmation)
     end
 
     def correct_user
@@ -83,5 +95,4 @@ class UsersController < ApplicationController
     def admin_user
       redirect_to(root_path) unless current_user.admin?
     end
-
 end

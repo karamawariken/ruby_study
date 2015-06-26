@@ -26,5 +26,7 @@ module SampleApp
     # config.i18n.default_locale = :de
     # bootstrap-sassとAsset Pipelineの互換性確保のため追加
     config.assets.precompile += %w(*.png *.jpg *.jpeg *.gif)
+    config.time_zone = 'Tokyo'
+    config.active_record.default_timezone = :local 
   end
 end

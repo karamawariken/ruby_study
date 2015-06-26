@@ -24,8 +24,8 @@ class Micropost < ActiveRecord::Base
   private
 
     def reply_to_user
-      if reply_to = self.content.match(/(@[\w+-.]*)/i)
-        @reply_to_user_name = reply_to[1].to_s
+      if match_check = self.content.match(/(@[\w+-.]*)/i)
+        @reply_to_user_name = match_check[1].to_s
         @reply_to_user_name.slice!("@")
         @reply_to_user = User.where(name: @reply_to_user_name)
         if @reply_to_user

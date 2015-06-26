@@ -31,12 +31,12 @@ describe Micropost do
 end
 
 describe "Reply Micropost" do
-  let(:user) { FactoryGirl.create(:user, name: "Example_User") }
-  let(:other_user) { FactoryGirl.create(:user, name: "Example_Other_User") }
+  let(:user) { FactoryGirl.create(:user, nickname: "ExUser") }
+  let(:other_user) { FactoryGirl.create(:user, nickname: "ExReUser") }
   before do
     user.save
     other_user.save
-    @micropost = user.microposts.build(content: "@Example_Other_User test")
+    @micropost = user.microposts.build(content: "@ExReUser test")
     @micropost.save
   end
 

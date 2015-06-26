@@ -1,7 +1,10 @@
 <%= render 'shared/error_messages', object: f.object%>
 
-<%= f.label :name, "Name (先頭と末尾の空白は削除されます)" %>
+<%= f.label :name, "Name" %>
 <%= f.text_field :name %>
+
+<%= f.label :nickname, "Nick Name(登録後変更できません)" %>
+<%= f.text_field :nickname %>
 
 <%= f.label :email %>
 <%= f.text_field :email %>

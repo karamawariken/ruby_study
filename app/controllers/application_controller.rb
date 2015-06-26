@@ -4,4 +4,6 @@ class ApplicationController < ActionController::Base
   protect_from_forgery with: :exception
   #コントローラー内で、ヘルパーを使用するためのinclude宣言
   include SessionsHelper
+  #messageかmicropostのreplyか判断
+  include MessagesHelper
 end

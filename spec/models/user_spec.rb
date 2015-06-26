@@ -3,7 +3,7 @@ require 'rails_helper'
 describe User do
 
   before do
-    @user = User.new(name: "Example_User", email: "user@example.com",
+    @user = User.new(name: "Example User", email: "user@example.com", nickname: "ExUser",
                      password: "foobar", password_confirmation: "foobar")
   end
 
@@ -11,6 +11,7 @@ describe User do
 
   it { should respond_to(:name) }
   it { should respond_to(:email) }
+  it { should respond_to(:nickname) }
   it { should respond_to(:password_digest) }
   it { should respond_to(:password) }
   it { should respond_to(:password_confirmation) }
@@ -41,11 +42,6 @@ describe User do
 
   describe "when name is not present" do
     before { @user.name = " " }
-    it { should_not be_valid }
-  end
-
-  describe "when name has em space" do
-    before { @user.name = "a　a" }
     it { should_not be_valid }
   end
 
@@ -87,9 +83,19 @@ describe User do
     it { should_not be_valid }
    end
 
+  describe "when email doesn't match validation" do
+    let(:missmatch_case_email) { "foo@bar..com" }
+
+    it "should_not be_valid" do
+      @user.email = missmatch_case_email
+      @user.save
+      should_not be_valid
+    end
+  end
+
   describe "when password is not present" do
     before do
-      @user = User.new(name: "Example User", email: "user@example.com",
+      @user = User.new(name: "Example User", email: "user@example.com", nickname: "ExUser",
                        password: " ", password_confirmation: " ")
     end
     it { should_not be_valid }
@@ -100,14 +106,19 @@ describe User do
     it { should_not be_valid }
   end
 
-  describe "when email doesn't match validation" do
-    let(:missmatch_case_email) { "foo@bar..com" }
+  describe "when nickname is not present" do
+    before { @user.nickname = " " }
+    it { should_not be_valid }
+  end
 
-    it "should_not be_valid" do
-      @user.email = missmatch_case_email
-      @user.save
-      should_not be_valid
-    end
+  describe "when nickname is too long" do
+    before { @user.nickname = "a" * 16 }
+    it { should_not be_valid }
+  end
+
+  describe "when nickname is too long" do
+    before { @user.nickname = "a  a"}
+    it { should_not be_valid }
   end
 
   describe "with a password that's too short" do
@@ -147,7 +158,7 @@ describe User do
     #itsメソッドは、引数として与えられたものremember_tokenに対して評価します。
     #つまり、it { expect(@user.remember_token).not_to be_blank }
     #gem 'rspec-its'を入れないといけない
-    #its(:remember_token) { should_not be_blank }
+    its(:remember_token) { should_not be_blank }
   end
 
   describe "micropost associations" do
@@ -164,7 +175,6 @@ describe User do
       expect(@user.microposts.to_a).to eq [newer_micropost, older_micropost]
     end
 
-    #重複のためコメントアウト
     it "should destroy associated microposts" do
       microposts = @user.microposts.to_a
       @user.destroy

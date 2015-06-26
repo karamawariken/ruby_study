@@ -54,4 +54,8 @@ module SessionsHelper
     end
   end
 
+  #APIkeyを所持しているかどうかを取得
+  def have_api_key?(access_token)
+    ApiKey.find_by(access_token: access_token["token"])
+  end
 end

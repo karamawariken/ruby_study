@@ -52,6 +52,20 @@ describe "Static pages" do
         it { should have_link("1 followers", href: followers_user_path(user)) }
       end
     end
+
+    describe "reply microposts " do
+      let(:user) { FactoryGirl.create(:user) }
+      let(:reply_user) { FactoryGirl.create(:user) }
+      before do
+        user.save
+        reply_user.save
+        FactoryGirl.create(:micropost, user: user, content: "@#{reply_user.name} from #{user.name}")
+        sign_in reply_user
+        visit root_path
+      end
+
+      it { should have_content("@#{reply_user.name} from #{user.name}")}
+    end
   end
 
   describe "Help page" do
