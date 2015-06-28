@@ -117,7 +117,12 @@ describe User do
   end
 
   describe "when nickname is too long" do
-    before { @user.nickname = "a  a"}
+    before { @user.nickname = "a a"}
+    it { should_not be_valid }
+  end
+
+  describe "when nickname is too long" do
+    before { @user.nickname = "@aa"}
     it { should_not be_valid }
   end
 

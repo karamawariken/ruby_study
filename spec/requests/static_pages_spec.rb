@@ -59,12 +59,12 @@ describe "Static pages" do
       before do
         user.save
         reply_user.save
-        FactoryGirl.create(:micropost, user: user, content: "@#{reply_user.name} from #{user.name}")
+        FactoryGirl.create(:micropost, user: user, content: "@#{reply_user.nickname} from #{user.name}")
         sign_in reply_user
         visit root_path
       end
 
-      it { should have_content("@#{reply_user.name} from #{user.name}")}
+      it { should have_content("@#{reply_user.nickname} from #{user.name}")}
     end
   end
 
