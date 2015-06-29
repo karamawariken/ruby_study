@@ -29,6 +29,20 @@ describe "Micropost pages" do
         expect { click_button "Post" }.to change(Micropost, :count).by(1)
       end
     end
+
+    describe "reply micropost" do
+      let(:reply_user) { FactoryGirl.create(:user) }
+      before do
+        user.save
+        reply_user.save
+        fill_in 'micropost_content', with: "@#{reply_user.nickname} test"
+        click_button "Post"
+        sign_in reply_user
+        visit root_path
+      end
+
+      it { should have_content("@#{reply_user.nickname} test") }
+    end
   end
 
   describe "micropost destruction" do
@@ -42,4 +56,8 @@ describe "Micropost pages" do
       end
     end
   end
+
+  # describe "reply micropost" do
+  #
+  # end
 end

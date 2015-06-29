@@ -1,13 +1,4 @@
 require 'rails_helper'
-# RSpec.describe "StaticPages", type: :request do
-#   describe "GET /static_pages" do
-#     it "works! (now write some real specs)" do
-#       visit '/static_pages/home'
-#       expect(response).to have_content('Sample App')
-#     end
-#   end
-# end
-
 describe "Static pages" do
   subject { page }
 
@@ -51,20 +42,6 @@ describe "Static pages" do
         it { should have_link("0 following", href: following_user_path(user)) }
         it { should have_link("1 followers", href: followers_user_path(user)) }
       end
-    end
-
-    describe "reply microposts " do
-      let(:user) { FactoryGirl.create(:user) }
-      let(:reply_user) { FactoryGirl.create(:user) }
-      before do
-        user.save
-        reply_user.save
-        FactoryGirl.create(:micropost, user: user, content: "@#{reply_user.nickname} from #{user.name}")
-        sign_in reply_user
-        visit root_path
-      end
-
-      it { should have_content("@#{reply_user.nickname} from #{user.name}")}
     end
   end
 

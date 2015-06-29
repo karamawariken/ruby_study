@@ -3,7 +3,7 @@
   <%= link_to user.name, user %>
   @<%= user.nickname %>
   <% if !current_user?(user) %>
-    | <%= link_to "Message", messages_path(user), method: :show %>
+    | <%= link_to "Message", message_path(user) %>
     <% if current_user.admin?%>
       <%#管理者のみ見える %>
       | <%= link_to "delete", user, method: :delete,

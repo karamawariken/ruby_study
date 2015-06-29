@@ -3,20 +3,11 @@ class MicropostsController < ApplicationController
   before_action :correct_user,   only: :destroy
 
   def create
-    message = message_check(micropost_params)
-    if message
-      @message = current_user.sender_user.build(message)
-      if @message.save
-        flash[:success] = "Message created!"
-      end
+    @message_or_micropost = create_model(micropost_params)
+    if @message_or_micropost.save
+      flash[:success] = "success"
     else
-      @micropost = current_user.microposts.build(micropost_params)
-      if @micropost.save
-        flash[:success] = "Micropost created!"
-      else
-        @feed_items = []
-        # render 'static_pages/home'
-      end
+      flash[:error] = "error"
     end
     redirect_to root_url
   end
@@ -36,5 +27,29 @@ class MicropostsController < ApplicationController
       #findでは、値がない場合例外が発生するため find_byにしてnilを渡させる
       @micropost = current_user.microposts.find_by(id: params[:id])
       redirect_to root_url if @micropost.nil?
+    end
+
+    def message_check(micropost)
+      #ここでメッセージとの判別を行う
+      direct_message_match = /^d(\s+?)@([\w+-.]*)/i
+      if reply_to_user_name = micropost[:content].match(direct_message_match)
+        reply_to_user = find_recipient_user(reply_to_user_name[2])
+        message_detail = { sender_id: current_user.id,reciptient_id: reply_to_user.id ,content: micropost[:content], read: false } if reply_to_user
+      end
+    end
+
+    def find_recipient_user(nick_name)
+      User.find_by(nickname: nick_name)
+    end
+
+    def create_model(micropost)
+      if reply_to_user_name = micropost[:content].match(/^d(\s+?)@([\w+-.]*)/i)
+        reply_to_user = find_recipient_user(reply_to_user_name[2])
+        @message = Messages.new(sender_id: current_user.id,reciptient_id: reply_to_user.id ,content: micropost[:content], read: false ) if reply_to_user
+      else
+        reply_to_user_name = micropost[:content].match(/^@([\w+-.]+)/i)
+        micropost["in_reply_to"] = find_recipient_user(reply_to_user_name[1]) if reply_to_user_name
+        @micropost = current_user.microposts.build(micropost)
+      end
     end
 end

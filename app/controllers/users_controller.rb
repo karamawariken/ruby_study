@@ -21,7 +21,7 @@ class UsersController < ApplicationController
     if params[:format] == "xml"
       access_token = JSON.parse(request.headers[:HTTP_AUTHORIZATION])
       if have_api_key?(access_token)
-        render :xml => @user 
+        render :xml => @user
       else
         head :bad_request
       end
@@ -56,7 +56,7 @@ class UsersController < ApplicationController
 
   def update
     #update_attributes属性を更新するメソッド
-    if @user.update_attributes(user_params)
+    if @user.update_attributes(user_update_params)
       #更新に成功した場合に扱う
       flash[:success] = "Profile updated"
       redirect_to @user
@@ -84,6 +84,10 @@ class UsersController < ApplicationController
     #ここにadminを入れないことにより任意のユーザが自分自身にアプリケーションの管理者権限を与えることを防止している
     def user_params
       params.require(:user).permit(:name, :email, :nickname, :password, :password_confirmation)
+    end
+
+    def user_update_params
+      params.require(:user).permit(:name, :email, :password, :password_confirmation)
     end
 
     def correct_user
