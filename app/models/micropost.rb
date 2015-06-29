@@ -1,4 +1,5 @@
 class Micropost < ActiveRecord::Base
+  include Content
   belongs_to :user
   belongs_to :in_reply_to, class_name: "User", foreign_key: "in_reply_to"
   #降順　new→oldの順
@@ -7,7 +8,7 @@ class Micropost < ActiveRecord::Base
 
   #バリデーションに成功し、オブジェクト保存された後呼ばれる。insertどちらとも呼ばれる
   #update時にも行う場合before_saveになる今はマイクロポストの編集がないためcreateのみとしている
-  before_create :reply_to_user
+  before_create :add_reply_to_user
 
   validates :content, presence: true, length: {maximum: 140 }
   validates :user_id, presence: true
@@ -23,15 +24,10 @@ class Micropost < ActiveRecord::Base
 
   private
 
-    def reply_to_user
-      #もっと簡単に
-      if match_check = self.content.match(/(@[\w+-.]*)/i)
-        @reply_to_user_name = match_check[1].to_s
-        @reply_to_user_name.slice!("@")
-        @reply_to_user = User.where(nickname: @reply_to_user_name)
-        if @reply_to_user
-          self.in_reply_to = @reply_to_user[0]
-        end
+    def add_reply_to_user
+      if reply_to_user_name = self.content.match(/^@([\w+-.]+)/i)
+        @reply_to_user_id = find_recipient_user(reply_to_user_name[1])
+        self.in_reply_to = @reply_to_user_id if @reply_to_user_id
       end
     end
 end
