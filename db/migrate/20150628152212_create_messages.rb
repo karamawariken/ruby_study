@@ -1,10 +1,9 @@
 class CreateMessages < ActiveRecord::Migration
   def change
     create_table :messages do |t|
-      t.string  :content
-      t.integer :sender_id
-      t.integer :reciptient_id
-      t.boolean :read
+      t.string  :content, null: false
+      t.integer :sender_id, null: false
+      t.integer :reciptient_id, null: false
 
       t.timestamps
     end

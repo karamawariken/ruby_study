@@ -29,15 +29,6 @@ class MicropostsController < ApplicationController
       redirect_to root_url if @micropost.nil?
     end
 
-    def message_check(micropost)
-      #ここでメッセージとの判別を行う
-      direct_message_match = /^d(\s+?)@([\w+-.]*)/i
-      if reply_to_user_name = micropost[:content].match(direct_message_match)
-        reply_to_user = find_recipient_user(reply_to_user_name[2])
-        message_detail = { sender_id: current_user.id,reciptient_id: reply_to_user.id ,content: micropost[:content], read: false } if reply_to_user
-      end
-    end
-
     def find_recipient_user(nick_name)
       User.find_by(nickname: nick_name)
     end
@@ -45,7 +36,7 @@ class MicropostsController < ApplicationController
     def create_model(micropost)
       if reply_to_user_name = micropost[:content].match(/^d(\s+?)@([\w+-.]*)/i)
         reply_to_user = find_recipient_user(reply_to_user_name[2])
-        @message = Messages.new(sender_id: current_user.id,reciptient_id: reply_to_user.id ,content: micropost[:content], read: false ) if reply_to_user
+        @message = Message.new(sender_id: current_user.id,reciptient_id: reply_to_user.id ,content: micropost[:content]) if reply_to_user
       else
         reply_to_user_name = micropost[:content].match(/^@([\w+-.]+)/i)
         micropost["in_reply_to"] = find_recipient_user(reply_to_user_name[1]) if reply_to_user_name

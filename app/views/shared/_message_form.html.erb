@@ -1,0 +1,9 @@
+<%= form_for(@message, url: messages_path) do |f| %>
+  <%= render 'shared/error_messages', object: f.object %>
+  <div class="field">
+    <%= f.text_area :content, placeholder: "Compose new message..." %>
+  </div>
+    <div><%= f.hidden_field :sender_id %></div>
+      <div><%= f.hidden_field :reciptient_id %></div>
+  <%= f.submit "Post", class: "btn btn-large btn-primary" %>
+<% end %>

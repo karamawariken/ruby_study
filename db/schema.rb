@@ -20,17 +20,16 @@ ActiveRecord::Schema.define(version: 20150628152212) do
   end
 
   create_table "messages", force: true do |t|
-    t.string   "content"
-    t.integer  "sender_id"
-    t.integer  "reciptient_id"
-    t.boolean  "read"
+    t.string   "content",       null: false
+    t.integer  "sender_id",     null: false
+    t.integer  "reciptient_id", null: false
     t.datetime "created_at"
     t.datetime "updated_at"
   end
 
   create_table "microposts", force: true do |t|
-    t.string   "content"
-    t.integer  "user_id"
+    t.string   "content",     null: false
+    t.integer  "user_id",     null: false
     t.datetime "created_at"
     t.datetime "updated_at"
     t.integer  "in_reply_to"
@@ -39,8 +38,8 @@ ActiveRecord::Schema.define(version: 20150628152212) do
   add_index "microposts", ["user_id", "created_at"], name: "index_microposts_on_user_id_and_created_at"
 
   create_table "relationships", force: true do |t|
-    t.integer  "follower_id"
-    t.integer  "followed_id"
+    t.integer  "follower_id", null: false
+    t.integer  "followed_id", null: false
     t.datetime "created_at"
     t.datetime "updated_at"
   end
@@ -50,9 +49,9 @@ ActiveRecord::Schema.define(version: 20150628152212) do
   add_index "relationships", ["follower_id"], name: "index_relationships_on_follower_id"
 
   create_table "users", force: true do |t|
-    t.string   "name"
-    t.string   "email"
-    t.string   "nickname"
+    t.string   "name",            null: false
+    t.string   "email",           null: false
+    t.string   "nickname",        null: false
     t.datetime "created_at"
     t.datetime "updated_at"
     t.string   "password_digest"

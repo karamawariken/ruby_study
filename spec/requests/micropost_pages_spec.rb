@@ -56,8 +56,4 @@ describe "Micropost pages" do
       end
     end
   end
-
-  # describe "reply micropost" do
-  #
-  # end
 end

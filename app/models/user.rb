@@ -9,8 +9,8 @@ class User < ActiveRecord::Base
                                    dependent:   :destroy
   has_many :followers, through: :reverse_relationships, source: :follower
 
-  has_many :messages, foreign_key: "sender_id", class_name: "Messages", dependent: :destroy
-  has_many :recipient_messages, foreign_key: "reciptient_id", class_name: "Messages", dependent: :destroy
+  has_many :messages, foreign_key: "sender_id", class_name: "Message", dependent: :destroy
+  has_many :recipient_messages, foreign_key: "reciptient_id", class_name: "Message", dependent: :destroy
 
   before_save { self.email = email.downcase }
   before_create :create_remember_token

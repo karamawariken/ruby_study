@@ -17,7 +17,7 @@ def make_users
                password_confirmation: "foobar",
                admin: true )
   k_n = User.create!(name: "kosei nishi",
-               email: "k@gmail.com",
+               email: "kosei.nishi@litalico.co.jp",
                nickname: "k_n",
                password: "foobar",
                password_confirmation: "foobar",
@@ -63,7 +63,7 @@ def make_message
     reply_users.each do |reply_user|
       t = t + 1;
       content = "d @#{reply_user.nickname} from #{user.name} DM#{t+1}"
-      Messages.create!(content: content, sender_user: user, reciptient_id: "#{reply_user.id}",read:false )
+      Message.create!(content: content, sender_user: user, reciptient_id: "#{reply_user.id}")
     end
   end
 end
