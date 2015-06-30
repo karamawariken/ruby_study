@@ -1,5 +1,4 @@
 class Micropost < ActiveRecord::Base
-  include Content
   belongs_to :user
   belongs_to :in_reply_to, class_name: "User", foreign_key: "in_reply_to"
   #降順　new→oldの順

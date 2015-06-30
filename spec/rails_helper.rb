@@ -5,7 +5,9 @@ require File.expand_path('../../config/environment', __FILE__)
 require 'rspec/rails'
 require 'simplecov'
 
-SimpleCov.start
+SimpleCov.start do
+    add_filter "/vendor/"
+end
 # Add additional requires below this line. Rails is not loaded until this point!
 
 # Requires supporting ruby files with custom matchers and macros, etc, in

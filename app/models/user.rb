@@ -15,13 +15,13 @@ class User < ActiveRecord::Base
   before_save { self.email = email.downcase }
   before_create :create_remember_token
 
-  VALID_NAMENICK_REGEX = /[^\w]/
+  INVALID_NICKNAME_REGEX = /[\W]/
   VALID_EMAIL_REGEX = /\A[\w+-.]+@[a-z\d\-]+(\.[a-z]+)*\.[a-z]+\z/i
 
   #presence 値が空ではないか case_sensitive 大文字小文字を区別するか
   validates :name,  presence: true, length: { maximum: 50 }
   validates :email, presence: true, format: { with: VALID_EMAIL_REGEX }, uniqueness: { case_sensitive: false }
-  validates :nickname, presence: true, length: { maximum: 15 }, format: { without: VALID_NAMENICK_REGEX ,message: "Nick Nameは、英数字と'_'(アンダーバー)のみ使えます"}, uniqueness: { case_sensitive: false }
+  validates :nickname, presence: true, length: { maximum: 15 }, format: { without: INVALID_NICKNAME_REGEX ,message: "Nick Nameは、英数字と'_'(アンダーバー)のみ使えます"}, uniqueness: { case_sensitive: false }
   validates :password, length: { minimum: 6 }
 
   #以下設定により、認証メソッドなどが使用できる

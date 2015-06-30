@@ -56,6 +56,18 @@ module SessionsHelper
 
   #APIkeyを所持しているかどうかを取得
   def have_api_key?(access_token)
-    ApiKey.find_by(access_token: access_token["token"])
+    if access_token && ApiKey.find_by(access_token: access_token["token"])
+      true
+    else
+      false
+    end
+  end
+
+  def check_token?(format)
+    if format == "xml"
+      have_api_key?(JSON.parse(request.headers[:HTTP_AUTHORIZATION]))
+    else
+      true
+    end
   end
 end

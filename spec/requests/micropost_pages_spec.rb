@@ -43,6 +43,24 @@ describe "Micropost pages" do
 
       it { should have_content("@#{reply_user.nickname} test") }
     end
+
+    describe "make message in micropost_form" do
+      let(:message_user) { FactoryGirl.create(:user) }
+      before do
+        user.save
+        message_user.save
+        fill_in 'micropost_content', with: "d @#{message_user.nickname} test"
+        click_button "Post"
+      end
+
+      it { should_not have_content("d @#{message_user.nickname} test") }
+
+      describe "view message page" do
+        before { visit message_path(message_user) }
+        it { should_not have_content("d @#{message_user.nickname}") }
+        it { should have_content("test") }
+      end
+    end
   end
 
   describe "micropost destruction" do

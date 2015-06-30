@@ -18,16 +18,11 @@ class UsersController < ApplicationController
   def show
     @user = User.find(params[:id])
     @microposts = @user.microposts.paginate(page: params[:page])
-    if params[:format] == "xml"
-      access_token = JSON.parse(request.headers[:HTTP_AUTHORIZATION])
-      if have_api_key?(access_token)
-        render :xml => @user
-      else
-        head :bad_request
-      end
-    elsif params[:format] == nil
+    #html形式であれば、このまま通る
+    if check_token?(params[:format])
       respond_to do |format|
         format.html
+        format.xml { render xml: @user}
       end
     else
       head :bad_request

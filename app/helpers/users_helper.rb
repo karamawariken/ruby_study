@@ -11,7 +11,7 @@ module UsersHelper
   def reply_user(micropost)
     if micropost.in_reply_to
         @user = micropost.in_reply_to
-        link_to("@#{@user.name}", @user)
+        link_to("@#{user_page}", @user)
     else
         @user = nil
     end

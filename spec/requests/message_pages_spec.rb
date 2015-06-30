@@ -18,7 +18,7 @@ describe "Message pages" do
 
   describe "message creation" do
     before do 
-      @message = Message.new(content: "test",sender_id: user.id, reciptient_id: other_user.id)
+      @message = Message.new(content: "test", sender_id: user.id, reciptient_id: other_user.id)
       @message.save
       visit message_path(other_user)
     end
@@ -41,7 +41,12 @@ describe "Message pages" do
       it "should create a message" do
         expect { click_button "Post" }.to change(Message, :count).by(1)
       end
-    end
 
+      describe "delete message" do
+        it "should delete a micropost" do
+          expect { click_link "delete" }.to change(Message, :count).by(-1)
+        end
+      end
+    end
   end
 end
