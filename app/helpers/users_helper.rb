@@ -8,12 +8,11 @@ module UsersHelper
     image_tag(gravatar_url, alt: user.name, class: "gravatar")
   end
 
-  def reply_user(micropost)
+  def add_reply_user_page_link(micropost)
+    content = h(micropost.content)
     if micropost.in_reply_to
-        @user = micropost.in_reply_to
-        link_to("@#{user_page}", @user)
-    else
-        @user = nil
+        content.sub!("@#{micropost.in_reply_to.nickname}", %Q{<a href="users/#{micropost.in_reply_to.id}">@#{micropost.in_reply_to.nickname}</a>})
     end
+    raw content
   end
 end

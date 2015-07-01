@@ -34,12 +34,16 @@ class MicropostsController < ApplicationController
     end
 
     def create_model(micropost)
-      if reply_to_user_name = micropost[:content].match(/^d(\s+?)@([\w+-.]*)/i)
-        reply_to_user = find_recipient_user_nick_name(reply_to_user_name[2])
-        @message = Message.new(sender_id: current_user.id,reciptient_id: reply_to_user.id ,content: micropost[:content]) if reply_to_user
+      if reply_to_user_name = micropost[:content].match(/^d[\s\u3000]+@(\w+)[\s\u3000]*(\S*)/i)
+        if reply_to_user_name[2].present? && reply_to_user = User.find_by(nickname: reply_to_user_name[1])
+          raise reply_to_user_name[2].inspect
+          @message = Message.new(sender_id: current_user.id,reciptient_id: reply_to_user.id ,content: micropost[:content])
+        else
+          @message = Message.new()
+        end
       else
-        reply_to_user_name = micropost[:content].match(/@([\w+-.]+)/i)
-        micropost["in_reply_to"] = find_recipient_user_nick_name(reply_to_user_name[1]) if reply_to_user_name
+        reply_to_user_name = micropost[:content].match(/@(\w+)/i)
+        micropost["in_reply_to"] = User.find_by(nickname: reply_to_user_name[1]) if reply_to_user_name
         @micropost = current_user.microposts.build(micropost)
       end
     end

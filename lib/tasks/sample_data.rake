@@ -50,7 +50,7 @@ def make_reply_microposts
   users.each do |user|
     reply_users.each do |reply_user|
       content = "@#{reply_user.nickname} from #{user.name}"
-      user.microposts.create!(content: content)
+      user.microposts.create!(content: content, in_reply_to: reply_user)
     end
   end
 end

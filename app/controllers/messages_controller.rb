@@ -37,7 +37,7 @@ class MessagesController < ApplicationController
     redirect_to root_url if @message.nil?
   end
 
-  def message_params 
+  def message_params
     params.require(:message).permit(:content, :sender_id, :reciptient_id)
   end
 end

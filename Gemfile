@@ -40,6 +40,8 @@ gem 'faker', '1.1.2'
 #ページネーション
 gem 'will_paginate', '3.0.4'
 
+gem 'rinku'
+
 group :doc do
   # bundle exec rake doc:rails generates the API under doc/api.
   gem 'sdoc', require: false
