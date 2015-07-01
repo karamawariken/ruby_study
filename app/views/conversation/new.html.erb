@@ -1,0 +1,13 @@
+<% provide(:title, 'New Direct Message') %>
+<h1>New Direct Message</h1>
+please write "d @nickname messge"
+<section>
+  <%= form_for(@message, url: conversation_index_path) do |f| %>
+    <%= render 'shared/error_messages', object: f.object %>
+    <div class="field">
+      <%= f.text_area :content, placeholder: "Compose new message..." %>
+    </div>
+      <div><%= f.hidden_field :sender_id %></div>
+    <%= f.submit "Post", class: "btn btn-large btn-primary" %>
+  <% end %>
+</section>

@@ -1,0 +1,10 @@
+<% provide(:title, 'All conversations') %>
+<h1>All conversations</h1>
+<h4><%= link_to "New Message", new_conversation_path%> </h4>
+<ul class="users">
+  <% if @conversations.present? %>
+    <% @conversations.each do |conversation| %>
+    <%= render partial: 'shared/conversation', locals: {conversation: conversation} %>
+    <% end %>
+  <% end %>
+</ul>

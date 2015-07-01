@@ -9,6 +9,8 @@ class User < ActiveRecord::Base
                                    dependent:   :destroy
   has_many :followers, through: :reverse_relationships, source: :follower
 
+  has_many :low_user_conversations, foreign_key: "high_user_id", class_name: "Conversation", dependent: :destroy
+  has_many :high_user_conversations, foreign_key: "low_user_id", class_name: "Conversation", dependent: :destroy
   has_many :messages, foreign_key: "sender_id", class_name: "Message", dependent: :destroy
   has_many :recipient_messages, foreign_key: "reciptient_id", class_name: "Message", dependent: :destroy
 

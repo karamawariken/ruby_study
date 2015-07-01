@@ -5,6 +5,7 @@ namespace :db do
     make_microposts
     make_relationships
     make_reply_microposts
+    make_conversations
     make_message
   end
 end
@@ -55,15 +56,26 @@ def make_reply_microposts
   end
 end
 
+def make_conversations
+  send_message_user = User.find(1)
+  users = User.all.limit(6).offset(1)
+  users.each do |users|
+    Conversation.create!(low_user_id:send_message_user.id, high_user_id:users.id)
+  end
+end
+
 def make_message
-  users = User.all.limit(6)
-  reply_users = User.all.limit(6)
+  conversations = Conversation.all
+  users = User.all.limit(6).offset(1)
+  send_message_user = User.find(1)
   t = 0
-  users.each do |user|
-    reply_users.each do |reply_user|
+  conversations.each do |conversation|
+    users.each do |user|
       t = t + 1;
-      content = "d @#{reply_user.nickname} from #{user.name} DM#{t+1}"
-      Message.create!(content: content, sender_user: user, reciptient_id: "#{reply_user.id}")
+      content = "d @#{send_message_user.nickname} from #{user.name} DM#{t+1}"
+      conversation.message.create!(content: content, sender_id: user.id, reciptient_id: "#{send_message_user.id}",read: "f")
+      content1 = "d @#{user.nickname} from #{send_message_user.name} DM#{t+1}"
+      conversation.message.create!(content: content1, sender_id: "#{send_message_user.id}", reciptient_id: user.id,read: "f")
     end
   end
 end

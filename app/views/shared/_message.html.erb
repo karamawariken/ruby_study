@@ -6,7 +6,6 @@
   <span class="timestamp">
     Posted <%= time_ago_in_words(message.created_at) %> ago.
   </span>
-  <span class="content"> <%= hide_nick_name(message.content) %> </span>
   <span>
     <% if current_user?(message.sender_user) %>
     <%= link_to "delete", message, method: :delete,
@@ -14,4 +13,5 @@
                                      title: message.content %>
   <% end %>
   </span>
+  <span class="content"> <%= hide_nick_name(message.content) %> </span>
 </li>
