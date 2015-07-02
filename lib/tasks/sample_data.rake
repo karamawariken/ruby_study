@@ -73,9 +73,9 @@ def make_message
     users.each do |user|
       t = t + 1;
       content = "d @#{send_message_user.nickname} from #{user.name} DM#{t+1}"
-      conversation.message.create!(content: content, sender_id: user.id, reciptient_id: "#{send_message_user.id}",read: "f")
+      conversation.messages.create!(content: content, sender_id: user.id, reciptient_id: "#{send_message_user.id}",read: "f")
       content1 = "d @#{user.nickname} from #{send_message_user.name} DM#{t+1}"
-      conversation.message.create!(content: content1, sender_id: "#{send_message_user.id}", reciptient_id: user.id,read: "f")
+      conversation.messages.create!(content: content1, sender_id: "#{send_message_user.id}", reciptient_id: user.id,read: "f")
     end
   end
 end

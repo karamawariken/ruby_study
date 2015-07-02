@@ -7,7 +7,7 @@ class MessagesController < ApplicationController
     read_check_message = Message.find_unread(current_user.id,params[:id])
     # raise read_check_message.inspect
     @message = current_user.messages.build(sender_id: current_user.id, reciptient_id: params[:id])
-    @messages = Message.find_conversation(current_user.id,params[:id])
+    @messages = Message.find_conversation(current_user.id,params[:id]).paginate(page: params[:page], :per_page => 10)
     if @messages.empty?
       flash[:error] = "メッセージがないか、相手がいません"
       redirect_to users_path
@@ -16,7 +16,7 @@ class MessagesController < ApplicationController
 
   #メッセージ作成
   def create
-    @conversation = find_conversation(message_params[:sender_id],message_params[:reciptient_id])
+    @conversation = find_conversation(current_user,User.find_by(id: message_params[:reciptient_id]))
     @message = Message.new(message_params)
     @message.conversation_id = @conversation.id
     @message.read = false
@@ -48,19 +48,18 @@ class MessagesController < ApplicationController
     params.require(:message).permit(:content, :sender_id, :reciptient_id)
   end
 
-  def find_conversation(user1_id, user2_id)
-    if (user1_id < user2_id)
-      low_user_id = user1_id
-      high_user_id = user2_id
+  def find_conversation(user1, user2)
+    if user1.id < user2.id
+      low_user = user1
+      high_user = user2
     else
-      low_user_id = user2_id
-      high_user_id = user1_id
+      low_user = user2
+      high_user = user1
     end
-
-    if Conversation.find_by(low_user_id: low_user_id, high_user_id: high_user_id).present?
-      @conversation = Conversation.find_by(low_user_id: low_user_id, high_user_id: high_user_id)
+    if Conversation.find_by(low_user_id: low_user.id, high_user_id: high_user.id).present?
+      @conversation = Conversation.find_by(low_user_id: low_user.id, high_user_id: high_user.id)
     else
-      @conversation = Conversation.create!(low_user_id: low_user_id, high_user_id: high_user_id)
-    end
+      @conversation = Conversation.create!(low_user_id: low_user.id, high_user_id: high_user.id)
+    end    
   end
 end

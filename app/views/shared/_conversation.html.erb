@@ -3,21 +3,21 @@
     <% if conversation.low_user_id == current_user.id %>
       <%=  link_to conversation.high_user.name , message_path(conversation.high_user.id) %>
       @<%= conversation.high_user.nickname %>
-      <% if conversation.message.first.read == false && conversation.message.first.reciptient_id == current_user.id %>
+      <% if conversation.messages.first.read == false && conversation.messages.first.reciptient_id == current_user.id %>
         <%=  link_to "New Message" , message_path(conversation.high_user.id) %>
       <% end %>
     <% else %>
       <%=  link_to conversation.low_user.name  , message_path(conversation.low_user.id) %>
       @<%= conversation.low_user.nickname %>
-      <% if conversation.message.first.read == false && conversation.message.first.reciptient_id == current_user.id %>
+      <% if conversation.messages.first.read == false && conversation.messages.first.reciptient_id == current_user.id %>
         <%=  link_to "New Message" , message_path(conversation.low_user.id) %>
       <% end %>
     <% end %>
   </span>
-  <% if conversation.message.present? %>
+  <% if conversation.messages.present? %>
   <span class="timestamp">
-    Posted <%= time_ago_in_words(conversation.message.first.created_at) %> ago.
+    Posted <%= time_ago_in_words(conversation.messages.first.created_at) %> ago.
   </span>
-  <span class="content">Last Message: <%= hide_nick_name(conversation.message.first.content) %> </span>
+  <span class="content">Last Message: <%= hide_nick_name(conversation.messages.first.content) %> </span>
   <% end %>
 </li>

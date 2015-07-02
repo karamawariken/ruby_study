@@ -20,11 +20,13 @@ ActiveRecord::Schema.define(version: 20150701153607) do
   end
 
   create_table "conversations", force: true do |t|
-    t.integer  "low_user_id"
-    t.integer  "high_user_id"
+    t.integer  "low_user_id",  null: false
+    t.integer  "high_user_id", null: false
     t.datetime "created_at"
     t.datetime "updated_at"
   end
+
+  add_index "conversations", ["low_user_id", "high_user_id"], name: "uses_pair_uniq_index", unique: true
 
   create_table "messages", force: true do |t|
     t.string   "content",         null: false
@@ -32,8 +34,8 @@ ActiveRecord::Schema.define(version: 20150701153607) do
     t.integer  "reciptient_id",   null: false
     t.datetime "created_at"
     t.datetime "updated_at"
-    t.boolean  "read"
-    t.integer  "conversation_id"
+    t.boolean  "read",            null: false
+    t.integer  "conversation_id", null: false
   end
 
   create_table "microposts", force: true do |t|

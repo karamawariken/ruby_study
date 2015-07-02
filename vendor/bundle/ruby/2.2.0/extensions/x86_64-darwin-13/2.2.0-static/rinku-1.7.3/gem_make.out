@@ -1,0 +1,65 @@
+/Users/kosei.nishi/.rbenv/versions/2.2.0/bin/ruby -r ./siteconf20150702-26909-9t7jug.rb extconf.rb
+creating Makefile
+
+make "DESTDIR=" clean
+
+make "DESTDIR="
+compiling autolink.c
+compiling buffer.c
+compiling rinku.c
+rinku.c:263:19: warning: passing 'uint8_t *' (aka 'unsigned char *') to parameter of type 'const char *' converts between pointers to integer types with different sign [-Wpointer-sign]
+                        print_link(ob, link->data, link->size);
+                                       ^~~~~~~~~~
+rinku.c:89:52: note: passing argument to parameter 'link' here
+static void print_link(struct buf *ob, const char *link, size_t size)
+                                                   ^
+rinku.c:296:12: warning: passing 'uint8_t *const' (aka 'unsigned char *const') to parameter of type 'const char *' converts between pointers to integer types with different sign [-Wpointer-sign]
+        rb_link = rb_str_new(link->data, link->size);
+                  ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+/Users/kosei.nishi/.rbenv/versions/2.2.0/include/ruby-2.2.0/ruby/intern.h:796:20: note: expanded from macro 'rb_str_new'
+        rb_str_new_static((str), (len)) : \
+                          ^~~~~
+/Users/kosei.nishi/.rbenv/versions/2.2.0/include/ruby-2.2.0/ruby/intern.h:727:37: note: passing argument to parameter here
+VALUE rb_str_new_static(const char *, long);
+                                    ^
+rinku.c:296:12: warning: passing 'uint8_t *const' (aka 'unsigned char *const') to parameter of type 'const char *' converts between pointers to integer types with different sign [-Wpointer-sign]
+        rb_link = rb_str_new(link->data, link->size);
+                  ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+/Users/kosei.nishi/.rbenv/versions/2.2.0/include/ruby-2.2.0/ruby/intern.h:797:13: note: expanded from macro 'rb_str_new'
+        rb_str_new((str), (len));         \
+                   ^~~~~
+/Users/kosei.nishi/.rbenv/versions/2.2.0/include/ruby-2.2.0/ruby/intern.h:706:29: note: passing argument to parameter here
+VALUE rb_str_new(const char*, long);
+                            ^
+rinku.c:442:3: warning: passing 'char *' to parameter of type 'const uint8_t *' (aka 'const unsigned char *') converts between pointers to integer types with different sign [-Wpointer-sign]
+                RSTRING_PTR(rb_text),
+                ^~~~~~~~~~~~~~~~~~~~
+/Users/kosei.nishi/.rbenv/versions/2.2.0/include/ruby-2.2.0/ruby/ruby.h:866:5: note: expanded from macro 'RSTRING_PTR'
+    (!(RBASIC(str)->flags & RSTRING_NOEMBED) ? \
+    ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+rinku.c:188:17: note: passing argument to parameter 'text' here
+        const uint8_t *text,
+                       ^
+rinku.c:454:12: warning: passing 'uint8_t *' (aka 'unsigned char *') to parameter of type 'const char *' converts between pointers to integer types with different sign [-Wpointer-sign]
+                result = rb_str_new(output_buf->data, output_buf->size);
+                         ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+/Users/kosei.nishi/.rbenv/versions/2.2.0/include/ruby-2.2.0/ruby/intern.h:796:20: note: expanded from macro 'rb_str_new'
+        rb_str_new_static((str), (len)) : \
+                          ^~~~~
+/Users/kosei.nishi/.rbenv/versions/2.2.0/include/ruby-2.2.0/ruby/intern.h:727:37: note: passing argument to parameter here
+VALUE rb_str_new_static(const char *, long);
+                                    ^
+rinku.c:454:12: warning: passing 'uint8_t *' (aka 'unsigned char *') to parameter of type 'const char *' converts between pointers to integer types with different sign [-Wpointer-sign]
+                result = rb_str_new(output_buf->data, output_buf->size);
+                         ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+/Users/kosei.nishi/.rbenv/versions/2.2.0/include/ruby-2.2.0/ruby/intern.h:797:13: note: expanded from macro 'rb_str_new'
+        rb_str_new((str), (len));         \
+                   ^~~~~
+/Users/kosei.nishi/.rbenv/versions/2.2.0/include/ruby-2.2.0/ruby/intern.h:706:29: note: passing argument to parameter here
+VALUE rb_str_new(const char*, long);
+                            ^
+6 warnings generated.
+linking shared-object rinku.bundle
+
+make "DESTDIR=" install
+/usr/bin/install -c -m 0755 rinku.bundle ./.gem.20150702-26909-8u0jy6

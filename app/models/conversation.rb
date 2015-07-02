@@ -1,5 +1,5 @@
 class Conversation < ActiveRecord::Base
-  has_many :message, dependent: :destroy
+  has_many :messages, dependent: :destroy
   belongs_to :low_user, class_name: "User", foreign_key: "low_user_id"
   belongs_to :high_user, class_name: "User", foreign_key: "high_user_id"
   validates :low_user_id, presence: true

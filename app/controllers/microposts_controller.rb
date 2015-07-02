@@ -49,6 +49,8 @@ class MicropostsController < ApplicationController
       if reply_to_user_name = micropost[:content].match(/^d[\s\u3000]+@(\w+)[\s\u3000]*(\S*)/i)
         if reply_to_user_name[2].present? && reply_to_user = User.find_by(nickname: reply_to_user_name[1])
           @conversation = find_conversation(current_user,reply_to_user)
+          @conversation.touch
+          @conversation.save
           @message = Message.new(sender_id: current_user.id,reciptient_id: reply_to_user.id ,content: micropost[:content],read: false, conversation_id: @conversation.id)
         else
           @message = Message.new()
