@@ -7,5 +7,7 @@ class CreateMessages < ActiveRecord::Migration
 
       t.timestamps
     end
+    add_index :messages, [:sender_id], :name => 'index_messages_on_sender_id'
+    add_index :messages, [:reciptient_id], :name => 'index_messages_on_reciptient_id'
   end
 end

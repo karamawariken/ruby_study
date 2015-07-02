@@ -11,8 +11,8 @@ module UsersHelper
   def add_reply_user_page_link(micropost)
     content = h(micropost.content)
     if micropost.in_reply_to
-        content.sub!("@#{micropost.in_reply_to.nickname}", %Q{<a href="users/#{micropost.in_reply_to.id}">@#{micropost.in_reply_to.nickname}</a>})
+        content.sub!("@#{micropost.in_reply_to.nickname}", %Q{<a href="/users/#{micropost.in_reply_to.id}">@#{micropost.in_reply_to.nickname}</a>})
     end
-    raw content
+    content.html_safe
   end
 end

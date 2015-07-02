@@ -5,13 +5,6 @@
   <% if @conversations.present? %>
     <% @conversations.each do |conversation| %>
     <%= render partial: 'shared/conversation', locals: {conversation: conversation} %>
-      <span>
-        <% if (current_user.id == conversation.low_user_id or current_user.id == conversation.high_user_id)  %>
-          <%= link_to "delete", conversation, method: :delete,
-                                           data: { confirm: "You sure?" },
-                                           title: conversation.id %>
-        <% end %>
-      </span>
     <% end %>
   <% end %>
 </ul>

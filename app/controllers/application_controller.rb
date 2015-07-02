@@ -6,4 +6,6 @@ class ApplicationController < ActionController::Base
   include SessionsHelper
   #messageかmicropostのreplyか判断
   include MessagesHelper
+  #会話のテーブル作成のためのヘルパー
+  include ConversationHelper
 end

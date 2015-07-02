@@ -9,8 +9,8 @@ class MessagesController < ApplicationController
     @message = current_user.messages.build(sender_id: current_user.id, reciptient_id: params[:id])
     @messages = Message.find_conversation(current_user.id,params[:id]).paginate(page: params[:page], :per_page => 10)
     if @messages.empty?
-      flash[:error] = "メッセージがないか、相手がいません"
-      redirect_to users_path
+      flash[:error] = "nothing user or messages"
+      redirect_to conversation_index_path()
     end
   end
 
@@ -22,8 +22,6 @@ class MessagesController < ApplicationController
     @message.read = false
     if @message.save
       flash[:success] = "success"
-      @conversation.touch
-      @conversation.save
     else
       flash[:error] = "error"
     end
@@ -46,20 +44,5 @@ class MessagesController < ApplicationController
 
   def message_params
     params.require(:message).permit(:content, :sender_id, :reciptient_id)
-  end
-
-  def find_conversation(user1, user2)
-    if user1.id < user2.id
-      low_user = user1
-      high_user = user2
-    else
-      low_user = user2
-      high_user = user1
-    end
-    if Conversation.find_by(low_user_id: low_user.id, high_user_id: high_user.id).present?
-      @conversation = Conversation.find_by(low_user_id: low_user.id, high_user_id: high_user.id)
-    else
-      @conversation = Conversation.create!(low_user_id: low_user.id, high_user_id: high_user.id)
-    end    
   end
 end
