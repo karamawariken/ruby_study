@@ -12,7 +12,7 @@ SampleApp::Application.routes.draw do
   resources :microposts, only: [:create, :destroy]
   resources :relationships, only: [:create, :destroy]
   resources :messages, only: [:show, :create, :destroy]
-  resources :conversation, only: [:index, :create]
+  resources :conversations, only: [:index, :create]
 
   root 'static_pages#home'
   match '/signup', to: 'users#new', via: 'get'

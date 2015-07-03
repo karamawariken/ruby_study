@@ -5,18 +5,17 @@ class MessagesController < ApplicationController
   #会話の中身を見る
   def show
     read_check_message = Message.find_unread(current_user.id,params[:id])
-    # raise read_check_message.inspect
     @message = current_user.messages.build(sender_id: current_user.id, reciptient_id: params[:id])
     @messages = Message.find_conversation(current_user.id,params[:id]).paginate(page: params[:page], :per_page => 10)
     if @messages.empty?
       flash[:error] = "nothing user or messages"
-      redirect_to conversation_index_path()
+      redirect_to conversations_path
     end
   end
 
   #メッセージ作成
   def create
-    @conversation = find_conversation(current_user,User.find_by(id: message_params[:reciptient_id]))
+    @conversation = find_or_create_conversation(current_user,User.find_by(id: message_params[:reciptient_id]))
     @message = Message.new(message_params)
     @message.conversation_id = @conversation.id
     @message.read = false

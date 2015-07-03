@@ -9,10 +9,12 @@ module UsersHelper
   end
 
   def add_reply_user_page_link(micropost)
-    content = h(micropost.content)
-    if micropost.in_reply_to
-        content.sub!("@#{micropost.in_reply_to.nickname}", %Q{<a href="/users/#{micropost.in_reply_to.id}">@#{micropost.in_reply_to.nickname}</a>})
+    reply_user = micropost[:content].match(/(@\w+)/i)
+    if micropost.in_reply_to.present?
+      split_content = micropost[:content].split(reply_user[1],2)
+      edit_content = h(split_content[0]) + link_to(reply_user, micropost.in_reply_to) + h(split_content[1])
+    else
+      micropost.content
     end
-    content.html_safe
   end
 end

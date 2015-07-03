@@ -49,16 +49,41 @@ describe "Micropost pages" do
       before do
         user.save
         message_user.save
-        fill_in 'micropost_content', with: "d @#{message_user.nickname} test"
-        click_button "Post"
       end
+      describe "makeing message" do
+        before do 
+          fill_in 'micropost_content', with: "d @#{message_user.nickname} test"
+          click_button "Post"
+        end
+        it "when valid_message " do
+          valid_messages = ["d\s@#{message_user.nickname} test",
+                            "d/\u3000/@#{message_user.nickname} test",
+                            "d\t@#{message_user.nickname} test",
+                            "d\r@#{message_user.nickname} test",
+                            "d\n@#{message_user.nickname} test",
+                            "d\f@#{message_user.nickname} test",
+                            "d\v@#{message_user.nickname} test",
+                            "d\t\r\n\f\v@#{message_user.nickname} test"
+                            ]
+          valid_messages.each do |valid_message|
+            should_not have_content(valid_message) 
+            visit message_path(message_user) 
+            should_not have_content(valid_message)
+            should have_content("test")
+          end 
+        end
 
-      it { should_not have_content("d @#{message_user.nickname} test") }
+        it "when invalid_message " do
+          valid_messages = ["d @#{message_user.nickname}","d　@#{message_user.nickname}test"]
+          valid_messages.each do |valid_message|
+            should_not have_content(valid_message) 
+            should_not have_content("error") 
+            visit message_path(message_user) 
+            should_not have_content(valid_message)
+            should have_content("test")
+          end 
+        end
 
-      describe "view message page" do
-        before { visit message_path(message_user) }
-        it { should_not have_content("d @#{message_user.nickname}") }
-        it { should have_content("test") }
       end
     end
   end

@@ -3,11 +3,13 @@ class MicropostsController < ApplicationController
   before_action :correct_user,   only: :destroy
 
   def create
-    @message_or_micropost_model = create_model(micropost_params)
-    if @message_or_micropost_model.save
-      flash[:success] = "success"
-    else
-      flash[:error] = "error"
+    @message_or_micropost = create_model(micropost_params)
+    if @message_or_micropost.present?
+      if @message_or_micropost.save
+        flash[:success] = "success"
+      else
+        flash[:error] = "error"
+      end
     end
     redirect_to root_url
   end
@@ -30,16 +32,11 @@ class MicropostsController < ApplicationController
     end
 
     def create_model(micropost)
-      if reply_to_user_name = micropost[:content].match(/^d[\s\u3000]+@(\w+)[\s\u3000]*(\S*)/i)
-        if reply_to_user_name[2].present? && reply_to_user = User.find_by(nickname: reply_to_user_name[1])
-          @conversation = find_conversation(current_user,reply_to_user)
-          @message = Message.new(sender_id: current_user.id,reciptient_id: reply_to_user.id ,content: micropost[:content],read: false, conversation_id: @conversation.id)
-        else
-          @message = Message.new()
-        end
+      if split_content = micropost[:content].match(/^d[[:space:]]+@(\w+)[[:space:]]*(\S*)/i)
+        create_conversation_and_message(micropost, split_content)
       else
-        reply_to_user_name = micropost[:content].match(/@(\w+)/i)
-        micropost["in_reply_to"] = User.find_by(nickname: reply_to_user_name[1]) if reply_to_user_name
+        split_content = micropost[:content].match(/@(\w+)/i)
+        micropost["in_reply_to"] = User.find_by(nickname: split_content[1]) if split_content
         @micropost = current_user.microposts.build(micropost)
       end
     end

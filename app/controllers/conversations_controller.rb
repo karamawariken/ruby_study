@@ -1,4 +1,4 @@
-class ConversationController < ApplicationController
+class ConversationsController < ApplicationController
   before_action :signed_in_user
 
   def index
@@ -9,14 +9,16 @@ class ConversationController < ApplicationController
   #フォーム作って会話の相手を@で出してメッセージと会話を作成する
   def create
     @message = create_conversation_and_message(message_params)
-    if @message.save
-      flash[:success] = "success"
-      redirect_to conversation_index_path
-    else
-      flash[:error] = "error"
-      content_fault = "d @"
-      @message = Message.new(content: content_fault, sender_id: current_user, read: false)
-      render 'new'
+    if @message.present?
+      if @message.save
+        flash[:success] = "success"
+        redirect_to conversations_path
+      else
+        flash[:error] = "error"
+        content_fault = "d @"
+        @message = Message.new(content: content_fault, sender_id: current_user, read: false)
+        render 'new'
+      end
     end
   end
 
@@ -36,14 +38,7 @@ class ConversationController < ApplicationController
   #他との整合性をとるため必ず "d @nickname message"にさせる
   def create_conversation_and_message(message)
     if reciptient_user = message[:content].match(/^d[\s\u3000]+@(\w+)[\s\u3000]*(\S*)/i)
-      if reciptient_user[2].present? && reciptient_user = User.find_by(nickname: reciptient_user[1])
-        @conversation = find_conversation(current_user,reciptient_user)
-        @message = Message.new(sender_id: current_user.id,reciptient_id: reciptient_user.id ,content: message[:content],read: false, conversation_id: @conversation.id)
-      else
-        @message = Message.new()
-      end
-    else
-      @message = Message.new()
+      create_conversation_and_message(micropost, split_content)
     end
   end
 

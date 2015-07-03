@@ -13,7 +13,7 @@ describe "Message pages" do
   describe "nothing messages" do
     before { visit message_path(other_user) }
 
-    it { should have_content("メッセージがないか、相手がいません") }
+    it { should have_content("nothing user or messages") }
   end
 
   describe "message creation" do

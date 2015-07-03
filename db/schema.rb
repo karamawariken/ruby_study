@@ -26,22 +26,22 @@ ActiveRecord::Schema.define(version: 20150701153607) do
     t.datetime "updated_at"
   end
 
+  add_index "conversations", ["high_user_id"], name: "index_conversations_on_high_user_id"
   add_index "conversations", ["low_user_id", "high_user_id"], name: "uses_pair_uniq_index", unique: true
   add_index "conversations", ["low_user_id"], name: "index_conversations_on_low_user_id"
-  add_index "conversations", ["high_user_id"], name: "index_conversations_on_high_user_id"
 
   create_table "messages", force: true do |t|
-    t.string   "content",         null: false
-    t.integer  "sender_id",       null: false
-    t.integer  "reciptient_id",   null: false
+    t.string   "content",                         null: false
+    t.integer  "sender_id",                       null: false
+    t.integer  "reciptient_id",                   null: false
     t.datetime "created_at"
     t.datetime "updated_at"
-    t.boolean  "read",            null: false
-    t.integer  "conversation_id", null: false
+    t.boolean  "read",            default: false, null: false
+    t.integer  "conversation_id"
   end
 
-  add_index "messages", ["sender_id"], name: "index_messages_on_sender_id"
   add_index "messages", ["reciptient_id"], name: "index_messages_on_reciptient_id"
+  add_index "messages", ["sender_id"], name: "index_messages_on_sender_id"
 
   create_table "microposts", force: true do |t|
     t.string   "content",     null: false

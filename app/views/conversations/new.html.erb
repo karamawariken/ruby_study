@@ -2,7 +2,7 @@
 <h1>New Direct Message</h1>
 please write "d @nickname messge"
 <section>
-  <%= form_for(@message, url: conversation_index_path) do |f| %>
+  <%= form_for(@message, url: conversations_path) do |f| %>
     <%= render 'shared/error_messages', object: f.object %>
     <div class="field">
       <%= f.text_area :content, placeholder: "Compose new message..." %>
