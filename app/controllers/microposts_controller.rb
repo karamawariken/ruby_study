@@ -7,11 +7,19 @@ class MicropostsController < ApplicationController
     if @message_or_micropost.present?
       if @message_or_micropost.save
         flash[:success] = "success"
+        redirect_to root_url
       else
         flash[:error] = "error"
+          @micropost = current_user.microposts.build(micropost_params)
+          @feed_items = current_user.feed.paginate(page: params[:page], :per_page => 10)
+          render 'static_pages/home'
       end
+    else
+      @micropost = current_user.microposts.build(micropost_params)
+      @feed_items = current_user.feed.paginate(page: params[:page], :per_page => 10)
+      flash[:error] = "error"
+      render 'static_pages/home'
     end
-    redirect_to root_url
   end
 
   def destroy
