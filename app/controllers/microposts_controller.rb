@@ -31,6 +31,7 @@ class MicropostsController < ApplicationController
       redirect_to root_url if @micropost.nil?
     end
 
+    #関数名綺麗に
     def create_model(micropost)
       if split_content = micropost[:content].match(/^d[[:space:]]+@(\w+)[[:space:]]*(\S*)/i)
         create_conversation_and_message(micropost, split_content)

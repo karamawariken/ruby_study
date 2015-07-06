@@ -1,17 +1,14 @@
 <li id="<%= conversation.id %>">
   <span class="user">
     <% if conversation.low_user_id == current_user.id %>
-      <%=  link_to conversation.high_user.name , message_path(conversation.high_user.id) %>
-      @<%= conversation.high_user.nickname %>
-      <% if conversation.messages.first.read == false && conversation.messages.first.reciptient_id == current_user.id %>
-        <%=  link_to "New Message" , message_path(conversation.high_user.id) %>
-      <% end %>
+      <% @sender_user = conversation.high_user%>
     <% else %>
-      <%=  link_to conversation.low_user.name  , message_path(conversation.low_user.id) %>
-      @<%= conversation.low_user.nickname %>
-      <% if conversation.messages.first.read == false && conversation.messages.first.reciptient_id == current_user.id %>
-        <%=  link_to "New Message" , message_path(conversation.low_user.id) %>
-      <% end %>
+      <% @sender_user = conversation.low_user%>
+    <% end %>
+    <%=  link_to @sender_user.name , message_path(@sender_user) %>
+    @<%= @sender_user.nickname %>
+    <% if conversation.messages.find_unread(current_user.id).present? %>
+      <%=  link_to "New Message" , message_path(@sender_user) %>
     <% end %>
   </span>
   <% if conversation.messages.present? %>

@@ -1,6 +1,6 @@
 <% provide(:title, 'New Direct Message') %>
 <h1>New Direct Message</h1>
-please write "d @nickname messge"
+please write "d @nickname message"
 <section>
   <%= form_for(@message, url: conversations_path) do |f| %>
     <%= render 'shared/error_messages', object: f.object %>

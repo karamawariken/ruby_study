@@ -4,7 +4,7 @@ class MessagesController < ApplicationController
 
   #会話の中身を見る
   def show
-    read_check_message = Message.find_unread(current_user.id,params[:id])
+    Message.update_read(current_user.id,params[:id])
     @message = current_user.messages.build(sender_id: current_user.id, reciptient_id: params[:id])
     @messages = Message.find_conversation(current_user.id,params[:id]).paginate(page: params[:page], :per_page => 10)
     if @messages.empty?

@@ -13,13 +13,12 @@ class Message < ActiveRecord::Base
     where("(sender_id = :sender_id AND reciptient_id = :reciptient_id) OR (sender_id = :reciptient_id AND reciptient_id = :sender_id)", sender_id: sender_id, reciptient_id: reciptient_id)
   end
 
-  def self.find_unread(sender_id, reciptient_id)
-    #booleanでは false : f  true : tが値となる
-    messages = self.where("(sender_id = :reciptient_id AND reciptient_id = :sender_id AND read = :read)", sender_id: sender_id, reciptient_id: reciptient_id, read: "f")
-    if messages.present?
-      messages.each do |message|
-        message.update(read: "t")
-      end
-    end
+  def self.update_read(sender_id, reciptient_id)
+    messages = self.where("(sender_id = :reciptient_id AND reciptient_id = :sender_id AND read = :read)", sender_id: sender_id, reciptient_id: reciptient_id, read: false)
+    messages.update_all(read: true)
+  end
+
+  def self.find_unread(reciptient_id)
+    where(reciptient_id: reciptient_id, read: false)
   end
 end
